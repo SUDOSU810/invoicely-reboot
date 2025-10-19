@@ -77,5 +77,21 @@
     "tailwindcss": "^3.4.17",
     "typescript": "^5",
     "vite": "^7.1.7"
-  }
+  },
+  "description": "*Automatically synced with your [v0.app](https://v0.app) deployments*",
+  "main": "postcss.config.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SUDOSU810/invoicely-reboot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SUDOSU810/invoicely-reboot/issues"
+  },
+  "homepage": "https://github.com/SUDOSU810/invoicely-reboot#readme"
 }
