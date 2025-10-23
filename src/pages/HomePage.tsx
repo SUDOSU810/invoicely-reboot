@@ -259,9 +259,36 @@ export default function HomePage() {
     alert("Invoice saved successfully!")
   }
 
-  const handleGeneratePDF = () => {
-    alert("PDF generation would be implemented here using jsPDF or similar library")
+  const handleGeneratePDF = async () => {
+  try {
+    const apiEndpoint = "https://oeegu8gbod.execute-api.us-east-1.amazonaws.com/default";
+
+    const response = await fetch(apiEndpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(invoiceData)
+    });
+
+    const result = await response.json();
+
+    if (response.status === 201 && result.pdfUrl) {
+      // Automatically download the PDF to user's device
+      const link = document.createElement("a");
+      link.href = result.pdfUrl;
+      link.download = "invoice.pdf";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      alert("PDF generated, stored in S3, and downloaded!");
+    } else {
+      alert("Error generating PDF: " + (result.message || "Unknown error"));
+    }
+   } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error)
+    alert("Error: " + message)
   }
+}
+
 
   const handlePreview = () => {
     setIsPreviewMode(!isPreviewMode)

@@ -45,16 +45,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     loadUser();
   }, []);
 
-  const login = async (email: string, password: string) => {
-    await signIn({ username: email, password });
-    const currentUser = await getCurrentUser();
-    const attributes = await fetchUserAttributes();
-    setUser({ 
-      username: currentUser.username, 
+ const login = async (email: string, password: string) => {
+  try {
+    // First, check if a user is already signed in
+    try {
+      const existingUser = await getCurrentUser()
+      if (existingUser) {
+        console.log("Existing user session found, signing out first...")
+        await signOut()
+      }
+    } catch {
+      // No current user, continue
+    }
+
+    // Proceed with new sign-in
+    await signIn({ username: email, password })
+    const currentUser = await getCurrentUser()
+    const attributes = await fetchUserAttributes()
+    setUser({
+      username: currentUser.username,
       email: attributes.email,
-      name: attributes.name 
-    });
-  };
+      name: attributes.name
+    })
+  } catch (err: any) {
+    console.error("Login error:", err)
+    throw err
+  }
+}
 
   const signup = async (name: string, email: string, password: string) => {
     await signUp({
